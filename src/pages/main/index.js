@@ -20,7 +20,7 @@ class Main extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this._resize);
-    this._handleGetLocation();
+    this.handleGetLocation();
     this._resize();
   }
 
@@ -28,19 +28,27 @@ class Main extends Component {
     window.removeEventListener('resize', this._resize);
   }
 
-  handleHideModal = () => {
-    this.props.modal(true);
+  handleHideModal = (e) => {
+    const [longitude, latitude] = e.lngLat;
+    
+    const data = {
+      hideShowModal: true,
+      latitude,
+      longitude
+    }
+    
+    this.props.modal(data);
   };
 
   // verifica se se o navegador suporta geolocalização
-  async _handleGetLocation() {
+  async handleGetLocation() {
     if (navigator.geolocation) {
-      await navigator.geolocation.getCurrentPosition(this._handleShowPosition);
+      await navigator.geolocation.getCurrentPosition(this.handleShowPosition);
     }
   }
 
   // obtem a localização e seta no state
-  _handleShowPosition = async ({ coords }) => {
+  handleShowPosition = async ({ coords }) => {
     await this.setState({
       viewport: {
         ...this.state.viewport,
@@ -60,11 +68,11 @@ class Main extends Component {
     });
   };
 
-  handleMapClick(e) {
-    const [latitude, longitude] = e.lngLat;
+  // handleMapClick(e) {
+  //   const [latitude, longitude] = e.lngLat;
 
-    alert(`Latitude: ${latitude} \nLongitude: ${longitude}`);
-  }
+  //   alert(`Latitude: ${latitude} \nLongitude: ${longitude}`);
+  // }
 
   render() {
     return (
@@ -77,22 +85,25 @@ class Main extends Component {
         }
         onViewportChange={viewport => this.setState({ viewport })}
       >
-        <Marker
-          latitude={-23.5439948}
-          longitude={-46.6065452}
-          onClick={this.handleMapClick}
-          captureClick={true}
-        >
-          <img
-            style={{
-              borderRadius: 100,
-              width: 48,
-              height: 48,
-            }}
-            alt="teste"
-            src="https://avatars2.githubusercontent.com/u/2254731?v=4"
-          />
-        </Marker>
+      {this.props.devs.map(dev => (
+          <Marker
+            key={dev.id}
+            latitude={dev.latitude}
+            longitude={dev.longitude}
+            onClick={this.handleMapClick}
+            captureClick={true}
+          >
+            <img
+              style={{
+                borderRadius: 100,
+                width: 48,
+                height: 48,
+              }}
+              alt={dev.name}
+              src={dev.avatar_url}
+            />
+          </Marker>
+        ))}
       </MapGL>
     );
   }
@@ -101,7 +112,7 @@ class Main extends Component {
 const mapStateToProps = state => ({
   // faça a logica aqui, caso não tenha conseguido fazer dentro do redux
   // não faça lógica no render
-  showHideModal: state.devs.showModal,
+  devs: state.devs.devs,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(DevActions, dispatch);

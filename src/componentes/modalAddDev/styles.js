@@ -22,6 +22,11 @@ export const Modal = styled.div`
       text-align: center;
     }
 
+    .error {
+      color: #f00;
+      font-size: 12px;
+    }
+
     form input {
       width: 100%;
       height: 36px;

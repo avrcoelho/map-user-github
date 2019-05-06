@@ -8,23 +8,26 @@ import { Creators as DevActions } from '../ducks/devs';
 export function* addDev(action) {
   try {
     // call:  utilizado para liar com promisse
-    const { data } = yield call(api.get, `repos/${action.payload.repository}`);
+    const { data } = yield call(api.get, `users/${action.payload.data.devInput}`);
 
     // aqui tem acesso ao state
-    const isDuplicated = yield select(state => state.devs.data.find(dev => dev.id === data.id));
+    const isDuplicated = yield select(state => state.devs.devs.find(dev => dev.id === data.id));
 
     if (isDuplicated) {
       yield put(DevActions.addDevFailued('Repositório já adicionado'));
     } else {
-      const repositoryData = {
+      const devData = {
         id: data.id,
-        name: data.full_name,
-        user: data.description,
-        url: data.html_url,
+        name: data.name,
+        login: data.login,
+        avatar_url: data.avatar_url,
+        html_url: data.html_url,
+        latitude: action.payload.data.latitude,
+        longitude: action.payload.data.longitude,
       };
 
       // put faz o papel de enviar a action para os reducers da aplicação e fazer as ações necessarias em cada reducer
-      yield put(DevActions.addDevSuccess(repositoryData));
+      yield put(DevActions.addDevSuccess(devData));
     }
   } catch (err) {
     yield put(DevActions.addDevFailued('Erro ao adicionar repositório'));

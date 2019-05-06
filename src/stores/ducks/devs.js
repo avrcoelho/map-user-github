@@ -5,6 +5,7 @@ export const Types = {
   ADD_REQUEST: 'devs/ADD_REQUEST',
   ADD_SUCCESS: 'devs/ADD_SUCCESS',
   ADD_FAILUED: 'devs/ADD_FAILUED',
+  REMOVE_DEV: 'devs/REMOVE_DEV',
   MODAL: 'devs/MODAL',
 };
 
@@ -14,9 +15,13 @@ export const Types = {
 
 const INITIAL_STATE = {
   loading: false,
-  data: [],
+  devs: [],
   error: null,
-  showModal: false,
+  dataModal: {
+    showHide: false,
+    latitude: '',
+    longitude: '',
+  },
 };
 
 export default function devs(state = INITIAL_STATE, action) {
@@ -28,13 +33,29 @@ export default function devs(state = INITIAL_STATE, action) {
         ...state,
         loading: false,
         error: null,
-        showModal: false,
-        data: [...state.data, action.payload.data],
+        dataModal: {
+          showHide: false,
+          latitude: '',
+          longitude: '',
+        },
+        devs: [...state.devs, action.payload.data],
       };
     case Types.ADD_FAILUED:
       return { ...state, loading: false, error: action.payload.error };
     case Types.MODAL:
-      return { ...state, showModal: action.payload.showHide };
+      return {
+        ...state,
+        error: null,
+        dataModal: {
+          showHide: action.payload.data.hideShowModal,
+          latitude: action.payload.data.latitude,
+          longitude: action.payload.data.longitude,
+        },
+      };
+    case Types.REMOVE_DEV:
+      return {
+        ...state, devs: state.devs.filter(dev => dev.id !== action.payload.id),
+      };
     default:
       return state;
   }
@@ -48,9 +69,9 @@ export const Creators = {
   // request que vai ser chamada
   // quem vai ouvir essa função vai er o saga, pois ela não esta completa para
   // ser enviada para o reducer
-  addDevRequest: repository => ({
+  addDevRequest: data => ({
     type: Types.ADD_REQUEST,
-    payload: { repository },
+    payload: { data },
   }),
   // recebe os dados do repositório e envia para o reducer
   addDevSuccess: data => ({
@@ -62,9 +83,13 @@ export const Creators = {
     type: Types.ADD_FAILUED,
     payload: { error },
   }),
-  modal: showHide => ({
+  removeDev: id => ({
+    type: Types.REMOVE_DEV,
+    payload: { id },
+  }),
+  modal: data => ({
     type: Types.MODAL,
-    payload: { showHide },
+    payload: { data },
   }),
 };
 /* actions - fim */
