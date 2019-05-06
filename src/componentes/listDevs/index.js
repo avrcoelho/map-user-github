@@ -24,7 +24,7 @@ class ListDevs extends Component {
             </div>
             <div className="icons">
               <i className="fa fa-times-circle" onClick={() => this.handleRemoveDev(dev.id)} />
-              <a href={dev.html_url} target="_blank"><i className="fa fa-chevron-right" /></a>
+              <a href={dev.html_url} target="_blank"  rel="noopener noreferrer"><i className="fa fa-chevron-right" /></a>
             </div>
           </div>
         ))}
