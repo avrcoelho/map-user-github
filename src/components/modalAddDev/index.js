@@ -28,7 +28,7 @@ class ModalAddDev extends Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const data = {
       devInput: this.state.devInput,
       latitude: this.props.dataModal.latitude,
@@ -38,13 +38,13 @@ class ModalAddDev extends Component {
     await this.props.addDevRequest(data);
 
     if(!!this.props.devs.error){
-      this.setState({ devInput: '' }) 
+      this.setState({ devInput: '' })
     }
   }
 
   static propTypes = {
     addDevRequest: PropTypes.func.isRequired,
-    error: PropTypes.oneOfType([null, PropTypes.string]).isRequired, 
+    error: PropTypes.oneOfType([null, PropTypes.string]).isRequired,
     dataModal: PropTypes.shape({
       showHide: PropTypes.bool
     }).isRequired
