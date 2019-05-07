@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types'
 
 import { Creators as DevActions } from '../../stores/ducks/devs';
 
@@ -39,6 +40,14 @@ class ModalAddDev extends Component {
     if(!!this.props.devs.error){
       this.setState({ devInput: '' }) 
     }
+  }
+
+  static propTypes = {
+    addDevRequest: PropTypes.func.isRequired,
+    error: PropTypes.oneOfType([null, PropTypes.string]).isRequired, 
+    dataModal: PropTypes.shape({
+      showHide: PropTypes.bool
+    }).isRequired
   }
 
   render() {

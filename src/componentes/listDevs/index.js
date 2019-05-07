@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types'
 
 import { Creators as DevActions } from '../../stores/ducks/devs';
 
@@ -10,6 +11,18 @@ import { Container } from './styles';
 class ListDevs extends Component {
   handleRemoveDev = id  => {
     this.props.removeDev(id);
+  }
+
+  static propTypes = {
+    removeDev: PropTypes.func.isRequired,
+    devs: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        avatar_url: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        login: PropTypes.string.isRequired,
+        html_url: PropTypes.string.isRequired
+      })).isRequired
   }
 
   render() {

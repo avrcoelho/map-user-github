@@ -3,6 +3,7 @@ import MapGL, { Marker } from 'react-map-gl';
 import Geocoder from 'react-map-gl-geocoder'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types'
 
 import { Creators as DevActions } from '../../stores/ducks/devs';
 
@@ -102,6 +103,15 @@ class Main extends Component {
 
   //   alert(`Latitude: ${latitude} \nLongitude: ${longitude}`);
   // }
+
+  static propTypes = {
+    devs: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        latitude: PropTypes.number.isRequired,
+        longitude: PropTypes.number.isRequired,
+      })).isRequired
+  }
 
   render() {
     return (
