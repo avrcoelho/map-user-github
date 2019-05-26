@@ -8,7 +8,7 @@ import Routes from './routes';
 
 import GlobalStyles from './styles/GlobalStyles';
 
-console.tron.log('Testando');
+// console.tron.log('Testando');
 
 const App = () => (
   // provider da acesso aos stores contidos na aplicação
